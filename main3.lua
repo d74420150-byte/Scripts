@@ -8,7 +8,7 @@ screenGui.ResetOnSpawn = false
 screenGui.Parent = playerGui
 
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 200, 0, 170)
+mainFrame.Size = UDim2.new(0, 200, 0, 210)
 mainFrame.Position = UDim2.new(0, 10, 0, 10)
 mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 mainFrame.BorderSizePixel = 0
@@ -50,6 +50,26 @@ teleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 teleportButton.TextSize = 14
 teleportButton.Font = Enum.Font.GothamBold
 teleportButton.Parent = mainFrame
+
+local anticheatLabel = Instance.new("TextLabel")
+anticheatLabel.Size = UDim2.new(0, 180, 0, 20)
+anticheatLabel.Position = UDim2.new(0, 10, 0, 160)
+anticheatLabel.BackgroundTransparency = 1
+anticheatLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+anticheatLabel.Text = "Removed bad anticheat"
+anticheatLabel.TextSize = 12
+anticheatLabel.Font = Enum.Font.Gotham
+anticheatLabel.Parent = mainFrame
+
+local fixedLabel = Instance.new("TextLabel")
+fixedLabel.Size = UDim2.new(0, 180, 0, 20)
+fixedLabel.Position = UDim2.new(0, 10, 0, 180)
+fixedLabel.BackgroundTransparency = 1
+fixedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+fixedLabel.Text = "Fixed label cash"
+fixedLabel.TextSize = 12
+fixedLabel.Font = Enum.Font.Gotham
+fixedLabel.Parent = mainFrame
 
 local buttonCorner = Instance.new("UICorner")
 buttonCorner.CornerRadius = UDim.new(0, 6)
@@ -93,12 +113,35 @@ game:GetService("UserInputService").InputChanged:Connect(function(input)
     end
 end)
 
+local function destroyAntiCheat()
+    local cheatEvent = game:GetService("ReplicatedStorage"):FindFirstChild("CheatDetectedEvent")
+    if cheatEvent then
+        cheatEvent:Destroy()
+    end
+end
+
+destroyAntiCheat()
+
+local function destroyTopGui()
+    local topGui = playerGui:FindFirstChild("Top")
+    if topGui then
+        topGui:Destroy()
+    end
+end
+
+destroyTopGui()
+
 mangoButton.MouseButton1Click:Connect(function()
     game:GetService("ReplicatedStorage"):WaitForChild("MANGOREALEVENT"):FireServer()
 end)
 
 moneyButton.MouseButton1Click:Connect(function()
-    game:GetService("ReplicatedStorage"):WaitForChild("cashflow"):FireServer()
+    local cashflowRemote = game:GetService("ReplicatedStorage"):FindFirstChild("cashflow")
+    if cashflowRemote then
+        for i = 1, 10 do
+            cashflowRemote:FireServer()
+        end
+    end
 end)
 
 teleportButton.MouseButton1Click:Connect(function()
